@@ -29,13 +29,19 @@ final class LogsCache<T: Codable> {
 
   func backupCache() {
     queue.sync(flags: .barrier) {
-      do {
-        let data = try JSONSerialization.data(withJSONObject: cachedLogs)
-        try data.write(to: LogsCache.fileURL())
-        self.cachedLogs = []
-      } catch {
+      if JSONSerialization.isValidJSONObject(cachedLogs) {
+        do {
+          let data = try JSONSerialization.data(withJSONObject: cachedLogs)
+          try data.write(to: LogsCache.fileURL())
+          self.cachedLogs = []
+        } catch {
+          if isDebug {
+            print("Error saving Logs cache.")
+          }
+        }
+      } else {
         if isDebug {
-          print("Error saving Logs cache.")
+          print("Invalid JSON object.")
         }
       }
     }
