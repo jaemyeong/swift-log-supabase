@@ -1,8 +1,9 @@
 import Foundation
+import Pulse
 
 public struct SupabaseLogConfig: Hashable {
     
-    public let session: URLSession?
+    public let session: URLSessionProtocol?
     
     public let supabaseURL: String
     
@@ -13,7 +14,7 @@ public struct SupabaseLogConfig: Hashable {
     public let isDebug: Bool
     
     public init(
-        session: URLSession? = nil,
+        session: URLSessionProtocol? = nil,
         supabaseURL: String,
         supabaseAnonKey: String,
         table: String = "logs",
@@ -29,5 +30,19 @@ public struct SupabaseLogConfig: Hashable {
 #else
         self.isDebug = false
 #endif
+    }
+    
+    public static func == (lhs: SupabaseLogConfig, rhs: SupabaseLogConfig) -> Bool {
+        lhs.supabaseURL == rhs.supabaseURL
+        && lhs.supabaseAnonKey == rhs.supabaseAnonKey
+        && lhs.table == rhs.table
+        && lhs.isDebug == rhs.isDebug
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.supabaseURL)
+        hasher.combine(self.supabaseAnonKey)
+        hasher.combine(self.table)
+        hasher.combine(self.isDebug)
     }
 }

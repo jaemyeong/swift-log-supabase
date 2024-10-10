@@ -1,12 +1,12 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.10
 
 import PackageDescription
 
 let package = Package(
     name: "swift-log-supabase",
+    defaultLocalization: "en",
     platforms: [
-        .iOS(.v11),
-        .macOS(.v10_13),
+        .iOS(.v15),
     ],
     products: [
         .library(
@@ -17,13 +17,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.1"),
+        .package(url: "https://github.com/apple/swift-log.git", .upToNextMajor(from: "1.6.1")),
+        .package(url: "https://github.com/kean/Pulse.git", .upToNextMajor(from: "5.1.1")),
     ],
     targets: [
         .target(
             name: "SupabaseLogging",
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
+                .product(name: "Pulse", package: "Pulse"),
             ]
         ),
         .testTarget(
